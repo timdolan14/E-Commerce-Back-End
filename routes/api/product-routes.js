@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const prData = await Product.findAll({
-      include: [{ model: Category }],
+      include: [{ model: Category }, { model: Tag }],
     });
     res.status(200).json(prData);
   } catch (err) {
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const prData = await Product.findByPk(req.params.id, {
-      include: [{ model: Category }],
+      include: [{ model: Category }, { model: Tag }],
     });
     res.status(200).json(prData);
   } catch (err) {
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
       },
     });
     if (!prData) {
-      res.status(404).json({ message: 'No library card found with that id!' });
+      res.status(404).json({ message: 'No Product found with that id!' });
       return;
     }
 

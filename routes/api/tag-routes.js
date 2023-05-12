@@ -7,8 +7,8 @@ router.get('/', async (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   try {
-    const data = await data.findAll({
-      include: [{ model: Reader }],
+    const newProductTags = await Tag.findAll({
+      include: [{ model: Product }, { model: ProductTag }],
     });
     res.status(200).json(data);
   } catch (err) {
@@ -20,8 +20,8 @@ router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try {
-    const data = await data.findByPk(blank.data, {
-      include: [{ model: Reader }],
+    const newProductTags = await Tag.findByPk(newProductTags.data, {
+      include: [{ model: Product }, { model: ProductTag }],
     });
     res.status(200).json(data);
   } catch (err) {
@@ -32,8 +32,8 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const Data = await data.create(data.body);
-    res.status(200).json(Data);
+    const newProductTags = await Tag.create(newProductTags.body);
+    res.status(200).json(data);
   } catch (err) {
     res.status(400).json(err);
   }
@@ -41,23 +41,40 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   // update a tag's name by its `id` value
-});
+  Tag.update (
+    {
+     id: req.body.id
+    },
+    {
+     where: {
+       ProductTag_id: req.params.ProductTag.id,
+     },
+    }
+   )
+   .then((updatedProductTag) => {
+     res.json(updatedProductTag);
+   })
+   .catch((err) => {
+     console.log(err);
+     res.json(err);
+   });
+ });
+
 
 router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
   try {
-    const Data = await Reader.destroy({
+    const newProductTags = await Tag.destroy({
       where: {
-        id: req.params.id,
+        ProductTag_id: req.params.ProductTag.id,
       },
     });
 
-    if (!Data) {
-      res.status(404).json({ message: 'No reader found with that id!' });
+    if (!newProductTags) {
+      res.status(404).json({ message: 'No Product Tag found with that id!' });
       return;
     }
-
-    res.status(200).json(Data);
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json(err);
   }
