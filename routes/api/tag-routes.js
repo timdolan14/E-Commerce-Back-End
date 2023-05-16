@@ -64,16 +64,16 @@ router.delete('/:id', async (req, res) => {
   try {
     const newProductTags = await Tag.destroy({
       where: {
-        ProductTag_id: req.params.ProductTag.id,
+        id: req.params.id
       },
     });
-
     if (!newProductTags) {
       res.status(404).json({ message: 'No Product Tag found with that id!' });
       return;
     }
     res.status(200).json(newProductTags);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
